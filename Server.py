@@ -9,7 +9,7 @@ try:
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     print('Socket created')
 except socket.error as msg:
-    print ('Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
+    print('Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
     sys.exit()
 
 # Bind socket to local host and port
@@ -31,9 +31,9 @@ while 1:
     if not data:
         break
 
-    reply = 'OK...' + data
+    reply = 'OK...'.encode() + data
 
     s.sendto(reply, addr)
-    print('Message[' + addr[0] + ':' + str(addr[1]) + '] - ' + data.strip())
+    print('Message[' + str(addr[0]) + ':' + str(addr[1]) + '] - ' + str(data.strip()))
 
 s.close()
