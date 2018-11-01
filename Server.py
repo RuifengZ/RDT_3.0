@@ -36,13 +36,12 @@ while 1:
     if not data:
         break
 
-    if ip_checksum(data) == checksum:
-        s.sendto("ACK" + seq, addr)
-        if seq == str(expect_seq):
-            print(pkt)
-            expect_seq = 1 - expect_seq
+    if ip_checksum(data) == checksum and seq == str(expect_seq):
+        print('recv: Sending ACK' + seq)
+        s.sendto(seq, addr)
+        expect_seq = 1 - expect_seq
     else:
-        s.sendto(("ACK" + str(1 - expect_seq)).encode(), addr)
+        s.sendto(expect_seq, addr)
 
     # reply = 'OK...'.encode() + data
     print('Message[' + str(addr[0]) + ':' + str(addr[1]) + '] - ' + str(data.strip()))
