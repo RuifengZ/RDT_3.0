@@ -18,6 +18,8 @@ except socket.error:
 host = 'localhost'
 port = 2163
 
+s.settimeout(5)
+
 while 1:
     msg = 'Enter message to send : '.encode()
 

@@ -38,10 +38,13 @@ while 1:
 
     if ip_checksum(data) == checksum:
         s.sendto("ACK" + seq, addr)
+        if seq == str(expect_seq):
+            print(pkt)
+            expect_seq = 1 - expect_seq
+    else:
+        s.sendto(("ACK" + str(1 - expect_seq)).encode(), addr)
 
-    reply = 'OK...'.encode() + data
-
-    s.sendto(reply, addr)
+    # reply = 'OK...'.encode() + data
     print('Message[' + str(addr[0]) + ':' + str(addr[1]) + '] - ' + str(data.strip()))
 
 s.close()
