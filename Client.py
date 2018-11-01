@@ -29,6 +29,7 @@ while 1:
     while not ack_received:
         try:
             # Set the whole string
+            print('send: SENDING PKT')
             s.sendto(ip_checksum(msg) + str(seq) + msg, (host, port))
         except socket.error as msg:
             print('Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
@@ -36,6 +37,7 @@ while 1:
 
         try:
             # receive data from client (data, addr)
+            print('send: GETTING ACK')
             reply, addr = s.recvfrom(1024)
             ack = reply[0]
         except timeout:

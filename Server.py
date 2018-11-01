@@ -41,6 +41,7 @@ while 1:
         s.sendto(seq, addr)
         expect_seq = 1 - expect_seq
     else:
+        print('recv: Sending ACK' + expect_seq)
         s.sendto(expect_seq, addr)
 
     # reply = 'OK...'.encode() + data
