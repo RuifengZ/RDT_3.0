@@ -1,8 +1,9 @@
 import socket
 import sys
+from check import ip_checksum
 
 HOST = ''  # Symbolic name meaning all available interfaces
-PORT = 8888  # Arbitrary non-privileged port
+PORT = 2163  # Arbitrary non-privileged port
 
 # Datagram (udp) socket
 try:
@@ -21,15 +22,22 @@ except socket.error as msg:
 
 print('Socket bind complete')
 
+expect_seq = 0
+
 # now keep talking with the client
 while 1:
     # receive data from client (data, addr)
-    d = s.recvfrom(1024)
-    data = d[0]
-    addr = d[1]
+    data, addr = s.recvfrom(1024)
+
+    checksum = data[:2]
+    seq = data[2]
+    pkt = data[3]
 
     if not data:
         break
+
+    if ip_checksum(data) == checksum:
+        s.sendto("ACK" + seq, addr)
 
     reply = 'OK...'.encode() + data
 

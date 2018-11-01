@@ -5,6 +5,8 @@
 
 import socket  # for sockets
 import sys  # for exit
+from check import ip_checksum
+
 
 # create dgram udp socket
 try:
@@ -14,7 +16,7 @@ except socket.error:
     sys.exit()
 
 host = 'localhost'
-port = 8888
+port = 2163
 
 while 1:
     msg = 'Enter message to send : '.encode()
