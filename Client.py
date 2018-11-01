@@ -18,18 +18,24 @@ except socket.error:
 host = 'localhost'
 port = 2163
 
-s.settimeout(5)
+s.settimeout(3)
 seq = 0
 
+checksum_test = True
 
-for i in range(3):
+for i in range(7):
     msg = 'Message ' + str(i)
     ack_received = False
     while not ack_received:
         try:
             # Set the whole string
-            print('send: SENDING PKT')
-            s.sendto(ip_checksum(msg) + str(seq) + msg, (host, port))
+            if i == 3 and checksum_test:
+                print('send: TESTING BAD CHECKSUM')
+                s.sendto(ip_checksum('wrong') + str(seq) + msg, (host, port))
+                checksum_test = False
+            else:
+                print('send: SENDING PKT')
+                s.sendto(ip_checksum(msg) + str(seq) + msg, (host, port))
         except socket.error as msg:
             print('Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
             sys.exit()
@@ -43,8 +49,7 @@ for i in range(3):
             print('send: TIMEOUT')
         else:
             if ack == str(seq):
-                print('send: ACK CORRECT')
                 ack_received = True
-
+    print('ACK FOUND, CHANGING SEQ')
     seq = 1 - seq
     # print('Server reply : ' + str(reply))

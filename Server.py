@@ -1,5 +1,6 @@
 import socket
 import sys
+import time
 from check import ip_checksum
 
 HOST = ''  # Symbolic name meaning all available interfaces
@@ -23,6 +24,7 @@ except socket.error as msg:
 print('Socket bind complete')
 
 expect_seq = 0
+timeout_test = True
 
 # now keep talking with the client
 while 1:
@@ -35,17 +37,23 @@ while 1:
 
     if not data:
         break
-
-    if ip_checksum(data) == checksum and seq == str(expect_seq):
-        print('recv: Sending ACK' + seq)
-        s.sendto(seq, addr)
-        print('recv: ' + pkt)
+    # print(str(ip_checksum(pkt) == checksum))
+  
+    if ip_checksum(pkt) == checksum and seq == str(expect_seq):
+        print('recv: Good Data Sending ACK' + str(seq))
+        print('recv pkt: ' + str(pkt))
+        if str(pkt) == 'Message 4':
+           time.sleep(4)
+        s.sendto(str(seq), addr)
         expect_seq = 1 - expect_seq
     else:
-        print('recv: Sending ACK' + expect_seq)
-        s.sendto(expect_seq, addr)
+        if seq == str(expect_seq):
+            print('recv: Bad Checksum Sending ACK' + str(1 - expect_seq))
+        else:
+            print('recv: Bad Seq Sending ACK' + str(1 - expect_seq))
+        s.sendto(str(1 - expect_seq), addr)
 
     # reply = 'OK...'.encode() + data
-    print('Message[' + str(addr[0]) + ':' + str(addr[1]) + '] - ' + str(data.strip()))
+    # print('Message[' + str(addr[0]) + ':' + str(addr[1]) + '] - ' + str(data.strip()))
 
 s.close()
