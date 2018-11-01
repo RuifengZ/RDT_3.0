@@ -20,11 +20,10 @@ port = 2163
 
 s.settimeout(5)
 seq = 0
-msg = 'Message '
+
 
 for i in range(3):
-    msg += str(i)
-while 1:
+    msg = 'Message ' + str(i)
     ack_received = False
     while not ack_received:
         try:

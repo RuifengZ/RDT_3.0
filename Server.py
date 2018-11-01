@@ -31,7 +31,7 @@ while 1:
 
     checksum = data[:2]
     seq = data[2]
-    pkt = data[3]
+    pkt = data[3:]
 
     if not data:
         break
@@ -39,6 +39,7 @@ while 1:
     if ip_checksum(data) == checksum and seq == str(expect_seq):
         print('recv: Sending ACK' + seq)
         s.sendto(seq, addr)
+        print('recv: ' + pkt)
         expect_seq = 1 - expect_seq
     else:
         print('recv: Sending ACK' + expect_seq)
