@@ -50,6 +50,7 @@ for i in range(7):
         else:
             print('Checking for ACK ' + str(seq))
             if ack == str(seq):
+                print('FOUND ACK')
                 ack_received = True
     print('ACK FOUND, CHANGING SEQ')
     seq = 1 - seq

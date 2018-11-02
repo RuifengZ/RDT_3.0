@@ -43,15 +43,15 @@ while 1:
         print('recv: Good Data Sending ACK' + str(seq))
         print('recv pkt: ' + str(pkt))
         if str(pkt) == 'Message 4':
-           time.sleep(4)
+           time.sleep(5)
         s.sendto(str(seq), addr)
         expect_seq = 1 - expect_seq
     else:
         if seq == str(expect_seq):
-            print('recv: Bad Checksum Sending ACK' + str(1 - expect_seq))
+            print('recv: Bad Checksum Not Sending')
         else:
             print('recv: Bad Seq Sending ACK' + str(1 - expect_seq))
-        s.sendto(str(1 - expect_seq), addr)
+            s.sendto(str(1 - expect_seq), addr)
 
     # reply = 'OK...'.encode() + data
     # print('Message[' + str(addr[0]) + ':' + str(addr[1]) + '] - ' + str(data.strip()))
