@@ -23,16 +23,18 @@ seq = 0
 
 checksum_test = True
 
+# Send 7 test messages
 for i in range(7):
     msg = 'Message ' + str(i)
     ack_received = False
     while not ack_received:
         try:
-            # Set the whole string
+            # Test bad checksum on message 3
             if i == 3 and checksum_test:
                 print('send: TESTING BAD CHECKSUM')
                 s.sendto(ip_checksum("wrong") + str(seq) + msg, (host, port))
                 checksum_test = False
+            # Send good package
             else:
                 print('send: SENDING PKT')
                 s.sendto(ip_checksum(msg) + str(seq) + msg, (host, port))
@@ -53,4 +55,3 @@ for i in range(7):
                 ack_received = True
     print('ACK FOUND, CHANGING SEQ')
     seq = 1 - seq
-    # print('Server reply : ' + str(reply))

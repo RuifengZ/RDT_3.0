@@ -38,22 +38,20 @@ while 1:
     if not data:
         break
     # print(str(ip_checksum(pkt) == checksum))
-  
+
     if ip_checksum(pkt) == checksum and seq == str(expect_seq):
         print('recv: Good Data Sending ACK' + str(seq))
         print('recv pkt: ' + str(pkt))
+        # Test timeout on message 4
         if str(pkt) == 'Message 4':
-           time.sleep(5)
+            time.sleep(5)
         s.sendto(str(seq), addr)
         expect_seq = 1 - expect_seq
     else:
+        # Check seq and send according ACK
         if seq == str(expect_seq):
             print('recv: Bad Checksum Not Sending')
         else:
             print('recv: Bad Seq Sending ACK' + str(1 - expect_seq))
             s.sendto(str(1 - expect_seq), addr)
-
-    # reply = 'OK...'.encode() + data
-    # print('Message[' + str(addr[0]) + ':' + str(addr[1]) + '] - ' + str(data.strip()))
-
 s.close()
